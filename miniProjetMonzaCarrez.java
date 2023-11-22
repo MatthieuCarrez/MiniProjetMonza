@@ -21,6 +21,14 @@ public class miniProjetMonzaCarrez
 
         return c;
     }
+    // Entrée: pos1 et pos2, deux variables de type Case
+    static boolean estStrictementPlusPetit(Case pos1, Case pos2)
+    {   // On récupère, du type agrégé Case, la position des deux variables 
+        pos1.position = pos1;
+        pos2.position = pos2;
+        return pos1 < pos2
+    }
+    static 
     static void affichagePlateau(Case initCase,Case c2, Case c3, Case c4, Case c5, Case c6)
     {   
         Ecran.afficher(" ");
@@ -39,7 +47,7 @@ public class miniProjetMonzaCarrez
     public static void main(String [] args)
     {
         Case c1, c2, c3, c4, c5, c6 = new Case();
-
+        // On initialise les différentes cases avec dans l'ordre: la couleur la position et si la case est occupée ou non
        c1 = initialisationCase("DEPA", 1, true);
        c2 = initialisationCase("BLEU", 2, false);
        c3 = initialisationCase("ROUG", 3, false);
