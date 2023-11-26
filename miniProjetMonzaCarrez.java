@@ -45,12 +45,12 @@ public class miniProjetMonzaCarrez
         return bolide;
     }
     // Entrée: pos1 et pos2, deux variables de type Case
-    static boolean estCaseSuivante( Case cOccupe, Case cSuiv )
+    static boolean estCaseSuivante( Case cActuelle, Case cSuivante )
     {   // Retourne true si le bolide se trouve sur cOccupe et que cSuiv.caseSuivante est vrai
         boolean estSuiv = false;
-        if( cOccupe.occupe )
+        if( cActuelle.occupe )
         {
-            if( cSuiv.caseSuivante )
+            if( cSuivante.caseSuivante )
             {
                 estSuiv = true;
             }
@@ -74,12 +74,12 @@ public class miniProjetMonzaCarrez
         }
         Ecran.sautDeLigne();
     }
-
+    
     static String lancerDeDes()
     {
         String res = "DEPA";
         char roll;
-        int cpt = 0;
+        
         Ecran.afficherln("Appuyer sur 'r' pour lancer le dé");
         roll = Clavier.saisirChar();
         while (roll != 'r')
@@ -92,21 +92,25 @@ public class miniProjetMonzaCarrez
         {
             case 1:
                 res = "BLEU";
+                Ecran.afficherln( "La couleur tirée est ", res, " !");
                 break;
             case 2:
                 res = "JAUN";
+                Ecran.afficherln( "La couleur tirée est ", res, " !");
                 break;
             case 3:
                 res = "ROUG";
+                Ecran.afficherln( "La couleur tirée est ", res, " !");
                 break;
             case 4:
                 res = "VERT";
+                Ecran.afficherln( "La couleur tirée est ", res, " !");
                 break;
         }
-        cpt++;
+        Ecran.afficherln(res);
         return res;
     }
-    static Case incrementationCaseSuivante(Case c3, Case c4, Case c5, Case c6, int cpt )
+    static Case incrementationCaseSuivante( Case c3, Case c4, Case c5, Case c6, int cpt )
     {
         Case c0 = c3;
         if( cpt == 1 )
@@ -116,6 +120,7 @@ public class miniProjetMonzaCarrez
             c0.caseSuivante = c3.caseSuivante;
             c0.occupe = c3.occupe;
             c0.derniere = c3.derniere;
+            cpt++;
         }
         else
         {
@@ -126,6 +131,7 @@ public class miniProjetMonzaCarrez
                 c0.caseSuivante = c4.caseSuivante;
                 c0.occupe = c4.occupe;
                 c0.derniere = c4.derniere;
+                cpt++;
             }
             else
             {
@@ -136,6 +142,7 @@ public class miniProjetMonzaCarrez
                     c0.caseSuivante = c5.caseSuivante;
                     c0.occupe = c5.occupe;
                     c0.derniere = c5.derniere;
+                    cpt++;
                 }
                 else
                 {
@@ -151,24 +158,42 @@ public class miniProjetMonzaCarrez
         }
         return c0;
     }
-
-    static void bolideAvance( Bolide bolide, Case caseActuelle, Case caseSuivante, String des, boolean estCaseSuiv, Case c0)
+    /**  
+     * caseActuelle = la case départ
+     * caseSuivante en entrée = la case bleue 
+     * roll en entrée = la couleur sur laquelle du dé dans le sous algo lancerDeDes()
+     * estCaseSuiv = le résultat du sous algo estCaseSuivante qui vérifie que les deux
+     * en entrée sont bien à la suite l'une de l'autre
+     * newCaseSuiv remplace caseSuivante et devient elle-même caseSuivante 
+     * 
+     * 
+     * */
+    static void bolideAvance( Bolide bolide, Case caseActuelle, Case caseSuivante, String roll, boolean estCaseSuiv, Case newCaseSuiv, Case c6)
     {
-        String lancer = des;
+        String lancer = roll;
         String couleurCaseBolide;
         
-        Ecran.afficherln( "La couleur tirée est ", des, " !");
+        
+        Ecran.afficherln ( "0",caseActuelle.couleur );
+        Ecran.afficherln ( "0bis",caseSuivante.couleur);
 
         if( ( lancer == caseSuivante.couleur ) && ( estCaseSuiv ) )
         {
             Ecran.afficherln("Le bolide avance !");
             caseActuelle.occupe = false;
+            Ecran.afficherln( "1",caseActuelle.occupe );
             caseSuivante.occupe = true;
+            Ecran.afficherln( "2",caseSuivante.occupe );
             caseSuivante.caseSuivante = false;
+            Ecran.afficherln( "3",caseSuivante.caseSuivante );
             couleurCaseBolide = caseSuivante.couleur;
+            Ecran.afficherln( "4",couleurCaseBolide );
             caseSuivante.couleur = bolide.modele;
+            Ecran.afficherln( "5", caseSuivante.couleur);
             caseActuelle = caseSuivante;
-            caseSuivante = c0;
+            Ecran.afficherln( "6",caseActuelle );
+            caseSuivante = newCaseSuiv;
+            Ecran.afficherln( "c0:",newCaseSuiv.couleur );
         }
         else
         {
@@ -179,7 +204,7 @@ public class miniProjetMonzaCarrez
     public static void main(String [] args)
     {
         String resDe;
-        int cpt = 1;
+        int cpt = 0;
         resDe = lancerDeDes();
         Bolide b1 = new Bolide();
         Case c1, c2, c3, c4, c5, c6 = new Case();
@@ -195,10 +220,12 @@ public class miniProjetMonzaCarrez
 
        affichagePlateau( c1, c2, c3, c4, c5, c6 );
        /*Ecran.afficherln( estCaseSuivante( c1, c2 ) );*/
-       cpt++;
-       bolideAvance(b1, c1, c2, resDe, estCaseSuivante(c1, c2), incrementationCaseSuivante( c3, c4, c5, c6, cpt ) );
+       do{
+       bolideAvance(b1, c1, c2, resDe, estCaseSuivante(c1, c2), incrementationCaseSuivante( c3, c4, c5, c6, cpt ), c6 );
        affichagePlateau( c1, c2, c3, c4, c5, c6 );
-       
+       resDe = lancerDeDes();
+       cpt++;
+       }while( cpt != 50);
     }
 
 }
