@@ -6,15 +6,13 @@ public class testOrdre
     }
     static class Case
     {
-        int position;
         String couleur;
         boolean estSuivante, estDerniere, estOccupe;
     }
 
-    static Case initCase( int position, String couleur, boolean estOccupe, boolean estSuiv, boolean estDerniere )
+    static Case initCase( String couleur, boolean estOccupe, boolean estSuiv, boolean estDerniere )
     {
         Case cInit = new Case();
-        cInit.position = position;
         cInit.couleur = couleur;
         cInit.estSuivante = estSuiv;
         cInit.estDerniere = estDerniere;
@@ -137,6 +135,7 @@ public class testOrdre
                 cSuivante.estOccupe = true;
                 cSuivante.estSuivante = false;
                 cNewSuivante.estSuivante = true;
+                Ecran.afficherln("")
 
 
                 couleurCasePrecedente = cActuelle.couleur;
@@ -151,17 +150,19 @@ public class testOrdre
             }
         }
     }
-    /*static Case newCaseSuivante(Case c2, Case c3, Case c4, Case c5, int bigCpt)
+    static Case newCaseSuivante(Case c1, Case c2, Case c3, Case c4, Case c5, int bigCpt)
     {
         int cpt = bigCpt;
-        Case cNew = c3;
+        Case cNew = c2;
         if( cpt == 1 )
         {
             cNew.couleur = c2.couleur;
             cNew.estOccupe = c2.estOccupe;
             cNew.estSuivante = c2.estSuivante;
             cNew.estDerniere = c2.estDerniere;
+            Ecran.afficherln("cNew : cpt 1: ", cNew.couleur, " ", cNew.estOccupe, " ", cNew.estSuivante, " ", cNew.estDerniere, cpt );
             cpt++;
+            
         }
         else
         {
@@ -171,6 +172,7 @@ public class testOrdre
                 cNew.estOccupe = c3.estOccupe;
                 cNew.estSuivante = c3.estSuivante;
                 cNew.estDerniere = c3.estDerniere;
+                Ecran.afficherln("cNew : cpt 2: ", cNew.couleur, " ", cNew.estOccupe, " ", cNew.estSuivante, " ", cNew.estDerniere, cpt );
                 cpt++; 
             }
             else
@@ -180,7 +182,9 @@ public class testOrdre
                     cNew.couleur = c4.couleur;
                     cNew.estOccupe = c4.estOccupe;
                     cNew.estSuivante = c4.estSuivante;
-                    cNew.estDerniere = c4.estDerniere;   
+                    cNew.estDerniere = c4.estDerniere; 
+                    Ecran.afficherln("cNew : cpt 3: ", cNew.couleur, " ", cNew.estOccupe, " ", cNew.estSuivante, " ", cNew.estDerniere, cpt );
+                    cpt++;
                 }
                 else
                 {
@@ -190,12 +194,14 @@ public class testOrdre
                         cNew.estOccupe = c5.estOccupe;
                         cNew.estSuivante = c5.estSuivante;
                         cNew.estDerniere = c5.estDerniere;
+                        Ecran.afficherln("cNew : cpt 4: ", cNew.couleur, " ", cNew.estOccupe, " ", cNew.estSuivante, " ", cNew.estDerniere, cpt );
+
                     }
                 }
             }
         }
         return cNew;
-    }*/
+    }
     static void affichagePlateauJeu(Case newCaseSuivante, Bolide bolide, Case c0, Case c1, Case c2, Case c3, Case c4, Case c5)
     {   
         Ecran.afficher(" ");
@@ -214,19 +220,19 @@ public class testOrdre
     }
     public static void main(String [] args)
     {
-        Case c0 = initCase( 1, "DEPA", true, false, false);
-        Case c1 = initCase( 2, "BLEU", false, true, false);
-        Case c2 = initCase( 3, "ROUG", false, false, false);
-        Case c3 = initCase( 4, "VERT", false, false, false);
-        Case c4 = initCase( 5, "BLEU", false, false, false);
-        Case c5 = initCase( 6, "JAUN", false, false, true);
+        Case c0 = initCase( "DEPA", true, false, false);
+        Case c1 = initCase( "BLEU", false, true, false);
+        Case c2 = initCase( "ROUG", false, false, false);
+        Case c3 = initCase( "VERT", false, false, false);
+        Case c4 = initCase( "BLEU", false, false, false);
+        Case c5 = initCase( "JAUN", false, false, true);
 
         Bolide b1 = initBolide( "XOOX" );
 
         affichagePlateau(b1, c0, c1, c2, c3, c4, c5);
-        bolideAvance( peutAvancer(c0, c1), couleurTiree(), b1, c0, c1, c2, c0 );
+        bolideAvance( peutAvancer(c0, c1), couleurTiree(), b1, c0, c1, newCaseSuivante( c1,c2, c3, c4, c5, 1), c0 );
         affichagePlateau( b1, c0, c1, c2, c3, c4, c5 );
-        bolideAvance( peutAvancer(c0, c1), couleurTireeD(), b1, c1, c2, c3, c1 );
+        bolideAvance( peutAvancer(c0, c1), couleurTireeD(), b1, c1, newCaseSuivante( c1, c2, c3, c4, c5, 1), c3, c1 );
         affichagePlateau( b1, c0, c1, c2, c3, c4, c5 );
     }
 
