@@ -54,7 +54,7 @@ public class testMini
             Ecran.afficherln("Erreur veuiller réessayer");
             roll = Clavier.saisirChar();    
         }
-        int tirage = (int) ( Math.random() * 4 ) + 1;
+        int tirage = (int) ( Math.random() ) + 1;
         switch( tirage )
         {
             case 1:
@@ -73,30 +73,48 @@ public class testMini
                 res = "VERT";
                 Ecran.afficherln( "La couleur tirée est ", res, " !");
                 break;
-        }
-        Ecran.afficherln(res);
+        }//Debug
+        /*Ecran.afficherln(res)*/;
         return res;
     }
 
-    static void bolideAvance( Ligne l1 )
+    static void bolideAvance(Ligne l)
     {
-        Ligne l = new Ligne();
         Bolide b = new Bolide();
         Case c1 = new Case();
         Case l0 = l.c1;
         b = initBolide("XOOX");
-        // ICI MATTHIEU, il faut au-fur-et-à-mesure réaffecter les variables.
+        // ICI MATTHIEU, il faut au fur-et-à-mesure réaffecter les variables.
         if( lancerDeDes() == l.c1.suivante.couleur && l.c1.estOccupe == true )
         {
-            l0 = l.c1.suivant;
+            l0 = l.c1.suivante;
+            Ecran.afficherln(l.c1.couleur);
+            l.c1.suivante = l.c1.suivante.suivante;
+            Ecran.afficherln(l.c1.suivante.couleur);
+            
+
         }
 
 
     }
-    static void affichagePlateau( Ligne l1 )
-    {   
-        Ligne l = new Ligne();
-        l = l1;
+    static void affichagePlateau( Ligne l )
+    {       
+        Ecran.afficher(" ");
+        for( int i = 0 ; i < 41 ; i++ )
+        {
+            Ecran.afficher("_");
+        }
+        Ecran.sautDeLigne();
+        Ecran.afficherln("| ", l.c1.couleur, " | ", l.c1.suivante.couleur, " | ", l.c1.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.suivante.suivante.couleur, " |");
+        Ecran.afficher(" ");
+        for( int i = 0 ; i < 41 ; i++ )
+        {
+            Ecran.afficher("‾");
+        }
+        Ecran.sautDeLigne();
+    }
+    static void affichagePlateau1( Ligne l )
+    {       
         Ecran.afficher(" ");
         for( int i = 0 ; i < 41 ; i++ )
         {
@@ -113,7 +131,9 @@ public class testMini
     }
     public static void main(String[] args)
     {
+                bolideAvance(creerLigne());
+
         affichagePlateau( creerLigne() );
-        lancerDeDes();
+        affichagePlateau1( creerLigne() );
     }    
 }
