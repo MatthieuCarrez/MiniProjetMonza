@@ -87,13 +87,71 @@ public class testMini
         // ICI MATTHIEU, il faut au fur-et-à-mesure réaffecter les variables.
         if( lancerDeDes() == l.c1.suivante.couleur && l.c1.estOccupe == true )
         {
+            l.c1.estOccupe = false;
             l0 = l.c1.suivante;
             Ecran.afficherln(l.c1.couleur);
-            l.c1.suivante = l.c1.suivante.suivante;
-            Ecran.afficherln(l.c1.suivante.couleur);
+            l.c1.suivante.estOccupe = true;
+            l.c1.suivante.couleur = b.modele;
+            Ecran.afficherln("2ème case: ", l.c1.suivante.couleur);
             
 
         }
+        else
+        {
+            if( lancerDeDes() == l.c1.suivante.suivante.couleur && l.c1.suivante.estOccupe == true)
+            {
+                l.c1.suivante = l0;
+                
+                Ecran.afficherln( l.c1.suivante.couleur);
+                l0 = l.c1.suivante.suivante;
+                Ecran.afficherln(l.c1.suivante.couleur);
+                l.c1.suivante.suivante.estOccupe = true;
+                l.c1.suivante.suivante.couleur = b.modele;
+                Ecran.afficherln("3ème case: ", l.c1.suivante.suivante.couleur);
+            }
+            else
+            {
+                if(lancerDeDes() == l.c1.suivante.suivante.suivante.couleur && l.c1.suivante.suivante.estOccupe == true)
+                {
+                    l.c1.suivante.suivante = l0;
+
+                    Ecran.afficherln( l.c1.suivante.suivante.couleur );
+                    l0 = l.c1.suivante.suivante.suivante;
+
+                    l.c1.suivante.suivante.suivante.estOccupe = true;
+                    l.c1.suivante.suivante.suivante.couleur = b.modele;
+                    Ecran.afficherln("4ème case: ", l.c1.suivante.suivante.suivante.couleur);
+                }
+                else
+                {
+                    if(lancerDeDes() == l.c1.suivante.suivante.suivante.suivante.couleur && l.c1.suivante.suivante.suivante.estOccupe == true)
+                    {
+                        l.c1.suivante.suivante.suivante = l0;
+
+                        Ecran.afficherln( l.c1.suivante.suivante.suivante.couleur );
+                        l0 = l.c1.suivante.suivante.suivante.suivante;
+
+                        l.c1.suivante.suivante.suivante.suivante.estOccupe = true;
+                        l.c1.suivante.suivante.suivante.suivante.couleur = b.modele;
+                        Ecran.afficherln("5ème case: ", l.c1.suivante.suivante.suivante.suivante.couleur);
+                    }
+                    else
+                    {
+                        if( lancerDeDes() == l.c1.suivante.suivante.suivante.suivante.suivante.couleur && l.c1.suivante.suivante.suivante.suivante.estOccupe == true )
+                        {
+                            l.c1.suivante.suivante.suivante.suivante = l0;
+                            Ecran.afficherln( l.c1.suivante.suivante.suivante.suivante.couleur );
+                            l0 = l.c1.suivante.suivante.suivante.suivante.suivante;
+
+                            l.c1.suivante.suivante.suivante.suivante.suivante.estOccupe = true;
+                            l.c1.suivante.suivante.suivante.suivante.suivante.couleur = b.modele;
+                            Ecran.afficherln("6ème case: ", l.c1.suivante.suivante.suivante.suivante.suivante.couleur);
+                        }
+                    }
+                }
+            }   
+        }
+
 
 
     }
@@ -131,9 +189,7 @@ public class testMini
     }
     public static void main(String[] args)
     {
-                bolideAvance(creerLigne());
-
+        bolideAvance(creerLigne());
         affichagePlateau( creerLigne() );
-        affichagePlateau1( creerLigne() );
     }    
 }
