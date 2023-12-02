@@ -14,6 +14,7 @@ public class testMini
     static class Bolide
     {
         String modele;
+        Case c;
     }
     static Case initCase( String couleur, boolean estO, boolean estD )
     {
@@ -40,6 +41,18 @@ public class testMini
         l.c1.suivante.suivante.suivante.suivante = initCase("BLEU", false, false);
         l.c1.suivante.suivante.suivante.suivante.suivante = initCase("JAUN", false, true);
         return l;
+    }
+    static Case avanceCase(Ligne cLigne)
+    {
+        String resDe = lancerDeDes();
+        
+        Bolide b = initBolide("XOOX");
+        if( resDe == cLigne.c1.suivante.couleur )
+        {
+            cLigne.c1.suivante.couleur = b.modele;
+            Ecran.afficherln(cLigne.c1.suivante.couleur);
+        }
+        return cLigne.c1.suivante;
     }
     // A enlever si problème
     static String lancerDeDes()
@@ -78,85 +91,11 @@ public class testMini
         return res;
     }
 
-    static void bolideAvance(Ligne l)
-    {
-        Bolide b = new Bolide();
-        Case c1 = new Case();
-        Case l0 = l.c1;
-        b = initBolide("XOOX");
-        // ICI MATTHIEU, il faut au fur-et-à-mesure réaffecter les variables.
-        if( lancerDeDes() == l.c1.suivante.couleur && l.c1.estOccupe == true )
-        {
-            l.c1.estOccupe = false;
-            l0 = l.c1.suivante;
-            Ecran.afficherln(l.c1.couleur);
-            l.c1.suivante.estOccupe = true;
-            l.c1.suivante.couleur = b.modele;
-            Ecran.afficherln("2ème case: ", l.c1.suivante.couleur);
-            
-
-        }
-        else
-        {
-            if( lancerDeDes() == l.c1.suivante.suivante.couleur && l.c1.suivante.estOccupe == true)
-            {
-                l.c1.suivante = l0;
-                
-                Ecran.afficherln( l.c1.suivante.couleur);
-                l0 = l.c1.suivante.suivante;
-                Ecran.afficherln(l.c1.suivante.couleur);
-                l.c1.suivante.suivante.estOccupe = true;
-                l.c1.suivante.suivante.couleur = b.modele;
-                Ecran.afficherln("3ème case: ", l.c1.suivante.suivante.couleur);
-            }
-            else
-            {
-                if(lancerDeDes() == l.c1.suivante.suivante.suivante.couleur && l.c1.suivante.suivante.estOccupe == true)
-                {
-                    l.c1.suivante.suivante = l0;
-
-                    Ecran.afficherln( l.c1.suivante.suivante.couleur );
-                    l0 = l.c1.suivante.suivante.suivante;
-
-                    l.c1.suivante.suivante.suivante.estOccupe = true;
-                    l.c1.suivante.suivante.suivante.couleur = b.modele;
-                    Ecran.afficherln("4ème case: ", l.c1.suivante.suivante.suivante.couleur);
-                }
-                else
-                {
-                    if(lancerDeDes() == l.c1.suivante.suivante.suivante.suivante.couleur && l.c1.suivante.suivante.suivante.estOccupe == true)
-                    {
-                        l.c1.suivante.suivante.suivante = l0;
-
-                        Ecran.afficherln( l.c1.suivante.suivante.suivante.couleur );
-                        l0 = l.c1.suivante.suivante.suivante.suivante;
-
-                        l.c1.suivante.suivante.suivante.suivante.estOccupe = true;
-                        l.c1.suivante.suivante.suivante.suivante.couleur = b.modele;
-                        Ecran.afficherln("5ème case: ", l.c1.suivante.suivante.suivante.suivante.couleur);
-                    }
-                    else
-                    {
-                        if( lancerDeDes() == l.c1.suivante.suivante.suivante.suivante.suivante.couleur && l.c1.suivante.suivante.suivante.suivante.estOccupe == true )
-                        {
-                            l.c1.suivante.suivante.suivante.suivante = l0;
-                            Ecran.afficherln( l.c1.suivante.suivante.suivante.suivante.couleur );
-                            l0 = l.c1.suivante.suivante.suivante.suivante.suivante;
-
-                            l.c1.suivante.suivante.suivante.suivante.suivante.estOccupe = true;
-                            l.c1.suivante.suivante.suivante.suivante.suivante.couleur = b.modele;
-                            Ecran.afficherln("6ème case: ", l.c1.suivante.suivante.suivante.suivante.suivante.couleur);
-                        }
-                    }
-                }
-            }   
-        }
-
-
-
-    }
-    static void affichagePlateau( Ligne l )
-    {       
+    static void affichagePlateau()
+    {   
+        
+        Ligne l = creerLigne();
+        avanceCase(l);
         Ecran.afficher(" ");
         for( int i = 0 ; i < 41 ; i++ )
         {
@@ -167,29 +106,12 @@ public class testMini
         Ecran.afficher(" ");
         for( int i = 0 ; i < 41 ; i++ )
         {
-            Ecran.afficher("‾");
-        }
-        Ecran.sautDeLigne();
-    }
-    static void affichagePlateau1( Ligne l )
-    {       
-        Ecran.afficher(" ");
-        for( int i = 0 ; i < 41 ; i++ )
-        {
-            Ecran.afficher("_");
-        }
-        Ecran.sautDeLigne();
-        Ecran.afficherln("| ", l.c1.couleur, " | ", l.c1.suivante.couleur, " | ", l.c1.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.suivante.suivante.couleur, " |");
-        Ecran.afficher(" ");
-        for( int i = 0 ; i < 41 ; i++ )
-        {
-            Ecran.afficher("‾");
+            Ecran.afficher("-");
         }
         Ecran.sautDeLigne();
     }
     public static void main(String[] args)
     {
-        bolideAvance(creerLigne());
-        affichagePlateau( creerLigne() );
+        affichagePlateau();
     }    
 }
