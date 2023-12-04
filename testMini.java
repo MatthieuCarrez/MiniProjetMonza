@@ -11,7 +11,6 @@ public class testMini
         Case c1;
 
     }
-    
     static class Bolide
     {
         String modele;
@@ -43,25 +42,67 @@ public class testMini
         l.c1.suivante.suivante.suivante.suivante.suivante = initCase("JAUN", false, true);
         return l;
     }
-    static Case avanceCase( Ligne cLigne, String resDe )
-    {
-        Case lTemp = new Case();
-    
-        
-        Bolide b = initBolide("XOOX");
-        
-            
-            if( resDe == cLigne.c1.suivante.couleur && cLigne.c1.estOccupe )
-            {
-                cLigne.c1.suivante.couleur = b.modele;
 
-            
-                
-                Ecran.afficherln(lTemp.couleur);
+    static Case avanceCase(Ligne cLigne)
+    {
+        Ligne l = cLigne;
+        Case caseBolide = initCase("XOOX", true, false);
+
+        String resDe = lancerDeDes();
+        Bolide b = initBolide("XOOX");
+
+        if( resDe == cLigne.c1.suivante.couleur && cLigne.c1.estOccupe )
+        {   // En gros, il faut insérer une "case" qui sera le bolide et ça a chaque case? (Voir le td15 de base de prog)
+            Ecran.afficherln("Le bolide avance"); 
+            cLigne.c1.suivante.couleur = caseBolide.couleur;
+            cLigne.c1.suivante.estOccupe = true;
+            Ecran.afficherln(cLigne.c1.suivante.couleur);
+        }
+        else
+        {
+            if ( resDe == cLigne.c1.suivante.suivante.couleur && cLigne.c1.suivante.estOccupe )
+            {
+                cLigne.c1.suivante.couleur = "BLEU";
+                cLigne.c1.estOccupe = false;
+                cLigne.c1.suivante.suivante.couleur = b.modele;
+                cLigne.c1.suivante.suivante.estOccupe = true;
+                cLigne.c1.suivante.estOccupe = false;
 
             }
+            else
+            {
+                if ( resDe == cLigne.c1.suivante.suivante.suivante.couleur && cLigne.c1.suivante.suivante.estOccupe )
+                {
+                    cLigne.c1.suivante.suivante.couleur = "ROUG";
+                    cLigne.c1.suivante.suivante.estOccupe = false;
+                    cLigne.c1.suivante.suivante.suivante.couleur = b.modele;
+                    cLigne.c1.suivante.suivante.suivante.estOccupe = true;
+
+                }
+                else
+                {
+                    if ( resDe == cLigne.c1.suivante.suivante.suivante.suivante.couleur && cLigne.c1.suivante.suivante.suivante.estOccupe )
+                    {
+                        cLigne.c1.suivante.suivante.suivante.couleur = "VERT";
+                        cLigne.c1.suivante.suivante.suivante.estOccupe = false;
+                        cLigne.c1.suivante.suivante.suivante.suivante.couleur = b.modele;
+                        cLigne.c1.suivante.suivante.suivante.suivante.estOccupe = true;
+
+                    }
+                    else
+                    {
+                        if ( resDe == cLigne.c1.suivante.suivante.suivante.suivante.suivante.couleur && cLigne.c1.suivante.suivante.suivante.suivante.estOccupe )
+                        {
+                            cLigne.c1.suivante.suivante.suivante.suivante.couleur = "BLEU";
+                            cLigne.c1.suivante.suivante.suivante.suivante.estOccupe = false;
+                            cLigne.c1.suivante.suivante.suivante.suivante.suivante.couleur = b.modele;
+                            cLigne.c1.suivante.suivante.suivante.suivante.suivante.estOccupe = true;
+                        }
+                    }
+                }
+            }
+        }
         return cLigne.c1.suivante;
-        
     }
     // A enlever si problème
     static String lancerDeDes()
@@ -80,11 +121,11 @@ public class testMini
         switch( tirage )
         {
             case 1:
-                res = "JAUN";
+                res = "BLEU";
                 Ecran.afficherln( "La couleur tirée est ", res, " !");
                 break;
             case 2:
-                res = "BLEU";
+                res = "JAUN";
                 Ecran.afficherln( "La couleur tirée est ", res, " !");
                 break;
             case 3:
@@ -104,12 +145,8 @@ public class testMini
     {   
         
         Ligne l = creerLigne();
-        // A modifier possiblement
-        String s = lancerDeDes();
-
-        /*do
-        {*/
-        avanceCase(l, s);
+        do{
+        avanceCase(l);
         Ecran.afficher(" ");
         for( int i = 0 ; i < 41 ; i++ )
         {
@@ -123,7 +160,7 @@ public class testMini
             Ecran.afficher("-");
         }
         Ecran.sautDeLigne();
-        /*}while( l.c1.suivante.suivante.suivante.suivante.suivante.estOccupe != true );*/
+        }while(l.c1.suivante.suivante.suivante.suivante.suivante.estOccupe != true);
     }
     public static void main(String[] args)
     {
