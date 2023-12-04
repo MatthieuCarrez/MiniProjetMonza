@@ -11,6 +11,7 @@ public class testMini
         Case c1;
 
     }
+    
     static class Bolide
     {
         String modele;
