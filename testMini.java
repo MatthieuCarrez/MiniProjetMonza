@@ -14,6 +14,7 @@ public class testMini
     static class Bolide
     {
         String modele;
+        Case c;
     }
     static Case initCase( String couleur, boolean estO, boolean estD )
     {
@@ -52,6 +53,10 @@ public class testMini
             if( resDe == cLigne.c1.suivante.couleur && cLigne.c1.estOccupe )
             {
                 cLigne.c1.suivante.couleur = b.modele;
+
+            
+                
+                Ecran.afficherln(lTemp.couleur);
 
             }
         return cLigne.c1.suivante;
@@ -94,32 +99,16 @@ public class testMini
         return res;
     }
 
-    static void bolideAvance(Ligne l, String resDe)
-    {
-        Bolide b = new Bolide();
-
-        b = initBolide("XOOX");
-        
-        if( resDe == l.c1.suivante.couleur && l.c1.estOccupe == true )
-        {
-            l.c1.estOccupe = false;
-            l0 = l.c1.suivante;
-            Ecran.afficherln(l.c1.couleur);
-            l.c1.suivante.estOccupe = true;
-            l.c1.suivante.couleur = b.modele;
-            Ecran.afficherln("2ème case: ", l.c1.suivante.couleur);
-            
-
-        }
-
-
-
-    }
     static void affichagePlateau()
-    {
+    {   
+        
         Ligne l = creerLigne();
+        // A modifier possiblement
         String s = lancerDeDes();
-        avanceCase( l,s );
+
+        /*do
+        {*/
+        avanceCase(l, s);
         Ecran.afficher(" ");
         for( int i = 0 ; i < 41 ; i++ )
         {
@@ -130,13 +119,13 @@ public class testMini
         Ecran.afficher(" ");
         for( int i = 0 ; i < 41 ; i++ )
         {
-            Ecran.afficher("‾");
+            Ecran.afficher("-");
         }
         Ecran.sautDeLigne();
+        /*}while( l.c1.suivante.suivante.suivante.suivante.suivante.estOccupe != true );*/
     }
     public static void main(String[] args)
     {
-        affichagePlateau();
         affichagePlateau();
     }    
 }
