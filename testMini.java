@@ -42,17 +42,21 @@ public class testMini
         l.c1.suivante.suivante.suivante.suivante.suivante = initCase("JAUN", false, true);
         return l;
     }
-    static Case avanceCase(Ligne cLigne)
+    static Case avanceCase( Ligne cLigne, String resDe )
     {
-        String resDe = lancerDeDes();
+        Case lTemp = new Case();
+    
         
         Bolide b = initBolide("XOOX");
-        if( resDe == cLigne.c1.suivante.couleur )
-        {
-            cLigne.c1.suivante.couleur = b.modele;
-            Ecran.afficherln(cLigne.c1.suivante.couleur);
-        }
+        
+            
+            if( resDe == cLigne.c1.suivante.couleur && cLigne.c1.estOccupe )
+            {
+                cLigne.c1.suivante.couleur = b.modele;
+
+            }
         return cLigne.c1.suivante;
+        
     }
     // A enlever si problème
     static String lancerDeDes()
@@ -67,15 +71,15 @@ public class testMini
             Ecran.afficherln("Erreur veuiller réessayer");
             roll = Clavier.saisirChar();    
         }
-        int tirage = (int) ( Math.random() ) + 1;
+        int tirage = (int) ( Math.random() * 4 ) + 1;
         switch( tirage )
         {
             case 1:
-                res = "BLEU";
+                res = "JAUN";
                 Ecran.afficherln( "La couleur tirée est ", res, " !");
                 break;
             case 2:
-                res = "JAUN";
+                res = "BLEU";
                 Ecran.afficherln( "La couleur tirée est ", res, " !");
                 break;
             case 3:
@@ -95,7 +99,12 @@ public class testMini
     {   
         
         Ligne l = creerLigne();
-        avanceCase(l);
+        // A modifier possiblement
+        String s = lancerDeDes();
+
+        /*do
+        {*/
+        avanceCase(l, s);
         Ecran.afficher(" ");
         for( int i = 0 ; i < 41 ; i++ )
         {
@@ -109,9 +118,15 @@ public class testMini
             Ecran.afficher("-");
         }
         Ecran.sautDeLigne();
+        /*}while( l.c1.suivante.suivante.suivante.suivante.suivante.estOccupe != true );*/
     }
     public static void main(String[] args)
     {
+        int cpt = 0;
+        while( cpt != 50 )
+        {
         affichagePlateau();
+        }
+
     }    
 }
