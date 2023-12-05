@@ -31,7 +31,7 @@ public class testMini
         b.modele = bModele;
         return b;
     }
-    static Ligne creerLigne()
+    static Ligne creerLigne1()
     {
         Ligne l = new Ligne();
         l.c1 = initCase( "DEPA", true, false );
@@ -40,6 +40,17 @@ public class testMini
         l.c1.suivante.suivante.suivante = initCase("VERT", false, false);
         l.c1.suivante.suivante.suivante.suivante = initCase("BLEU", false, false);
         l.c1.suivante.suivante.suivante.suivante.suivante = initCase("JAUN", false, true);
+        return l;
+    }
+    static Ligne creerLigne2()
+    {
+        Ligne l = new Ligne();
+        l.c1 = initCase( "DEPA", true, false );
+        l.c1.suivante = initCase("ROSE", false, false);
+        l.c1.suivante.suivante = initCase("JAUN", false, false);
+        l.c1.suivante.suivante.suivante = initCase("BLAN", false, false);
+        l.c1.suivante.suivante.suivante.suivante = initCase("ROUG", false, false);
+        l.c1.suivante.suivante.suivante.suivante.suivante = initCase("VERT", false, true);
         return l;
     }
 
@@ -144,7 +155,7 @@ public class testMini
     static void affichagePlateau()
     {   
         
-        Ligne l = creerLigne();
+        Ligne l = creerLigne1();
         do{
         avanceCase(l);
         Ecran.afficher(" ");

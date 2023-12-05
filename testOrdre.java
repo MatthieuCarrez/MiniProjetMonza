@@ -1,239 +1,293 @@
 public class testOrdre
 {
-    static class Bolide
-    {
-        String modele;
-    }
     static class Case
     {
         String couleur;
-        boolean estSuivante, estDerniere, estOccupe;
+        boolean estOccupe, estDerniere;
+        Case suivante;
     }
-
-    static Case initCase( String couleur, boolean estOccupe, boolean estSuiv, boolean estDerniere )
+    static class Ligne
     {
-        Case cInit = new Case();
-        cInit.couleur = couleur;
-        cInit.estSuivante = estSuiv;
-        cInit.estDerniere = estDerniere;
-        cInit.estOccupe = estOccupe;
-        return cInit;
-    }
-    static Bolide initBolide( String modele )
-    {
-        Bolide bInit = new Bolide();
-        bInit.modele = modele;
-        return bInit;
-    }
-
-    static void affichagePlateau(Bolide bolide, Case c0, Case c1, Case c2, Case c3, Case c4, Case c5)
-    {   
-        Ecran.afficher(" ");
-        for( int i = 0 ; i < 41 ; i++ )
-        {
-            Ecran.afficher("_");
-        }
-        Ecran.sautDeLigne();
-        Ecran.afficherln("| ", c0.couleur, " | ", c1.couleur, " | ", c2.couleur, " | ", c3.couleur, " | ", c4.couleur, " | ", c5.couleur, " |");
-        Ecran.afficher(" ");
-        for( int i = 0 ; i < 41 ; i++ )
-        {
-            Ecran.afficher("-");
-        }
-        Ecran.sautDeLigne();
-    }
-    //
-    static String couleurTiree()
-    {
-        char roll = 'r';
-        Ecran.afficherln("Une couleur va être tirée au sort");
-        Ecran.afficherln("Appuyer sur 'r' pour lancer le dé");
-        do
-        {
-            roll = Clavier.saisirChar();
-            if ( roll != 'r')
-            {
-                Ecran.afficherln( "Erreur de saisie, recommencer !" );
-            }
-        }while( roll != 'r' );
-
-        int de = /*(int) ( Math.random() * 4 ) +*/ 1;
-        String couleurTiree = "DEFAULT";
-
-        switch ( de )
-        {
-            case 1:
-                couleurTiree = "BLEU";
-                break;
-            case 2:
-                couleurTiree = "JAUN";
-                break;
-            case 3:
-                couleurTiree = "VERT";
-                break;
-            case 4:
-                couleurTiree = "ROUG";
-            default:
-                break;
-        }
-        Ecran.afficherln( "La couleur tirée est ", couleurTiree );
-        return couleurTiree;
-    }
-    static String couleurTireeD()
-    {
-        char roll = 'r';
-        Ecran.afficherln("Une couleur va être tirée au sort");
-        Ecran.afficherln("Appuyer sur 'r' pour lancer le dé");
-        do
-        {
-            roll = Clavier.saisirChar();
-            if ( roll != 'r')
-            {
-                Ecran.afficherln( "Erreur de saisie, recommencer !" );
-            }
-        }while( roll != 'r' );
-
-        int de = /*(int) ( Math.random() * 4 ) +*/ 4;
-        String couleurTiree = "DEFAULT";
-
-        switch ( de )
-        {
-            case 1:
-                couleurTiree = "BLEU";
-                break;
-            case 2:
-                couleurTiree = "JAUN";
-                break;
-            case 3:
-                couleurTiree = "VERT";
-                break;
-            case 4:
-                couleurTiree = "ROUG";
-            default:
-                break;
-        }
-        Ecran.afficherln( "La couleur tirée est ", couleurTiree );
-        return couleurTiree;
-    }
-    
-
-    static boolean peutAvancer( Case cActu, Case cSuiv )
-    {
-        return (cActu.estOccupe == cSuiv.estSuivante);
-    }
-
-    static void bolideAvance( boolean resPeutAvancer, String resCouleurTiree, Bolide bModele, Case cActuelle, Case cSuivante, Case cNewSuivante, Case cPrecedente )
-    {
+        Case c1;
         
-        String couleurCaseActuelle, couleurCasePrecedente;
-        if( resCouleurTiree == cSuivante.couleur )
-        {
-            if( resPeutAvancer )
-            {
-                Ecran.afficherln("Le bolide avance ! ");
-                cActuelle.estOccupe = false;
-                cSuivante.estOccupe = true;
-                cSuivante.estSuivante = false;
-                cNewSuivante.estSuivante = true;
-                Ecran.afficherln("")
 
-
-                couleurCasePrecedente = cActuelle.couleur;
-                couleurCaseActuelle = cSuivante.couleur;
-                cPrecedente = cActuelle;
-                cActuelle = cSuivante;
-                cActuelle.couleur = bModele.modele;
-                cSuivante = cNewSuivante;
-                Ecran.afficherln("A effacer. couleur case précédente: ", cPrecedente.couleur);
-                Ecran.afficherln("A effacer. couleur case actuelle: ", cActuelle.couleur);
-                Ecran.afficherln("A effacer. couleur case suivante: ", cSuivante.couleur);
-            }
-        }
     }
-    static Case newCaseSuivante(Case c1, Case c2, Case c3, Case c4, Case c5, int bigCpt)
+    static class De
     {
-        int cpt = bigCpt;
-        Case cNew = c2;
-        if( cpt == 1 )
-        {
-            cNew.couleur = c2.couleur;
-            cNew.estOccupe = c2.estOccupe;
-            cNew.estSuivante = c2.estSuivante;
-            cNew.estDerniere = c2.estDerniere;
-            Ecran.afficherln("cNew : cpt 1: ", cNew.couleur, " ", cNew.estOccupe, " ", cNew.estSuivante, " ", cNew.estDerniere, cpt );
-            cpt++;
-            
-        }
-        else
-        {
-            if ( cpt == 2 )
+        String resDe1, resDe2, resDe3;
+    }
+    static class Bolide
+    {
+        String modele;
+        Case c;
+    }
+    static Case initCase( String couleur, boolean estO, boolean estD )
+    {
+        Case c = new Case();
+        c.couleur = couleur;
+        c.estOccupe = estO;
+        c.estDerniere = estD;
+        return c;
+
+    }
+    static Bolide initBolide(String bModele)
+    {
+        Bolide b = new Bolide();
+        b.modele = bModele;
+        return b;
+    }
+    static De initDe( String de1, String de2, String de3 )
+    {
+        De d = new De();
+        d.resDe1 = de1;
+        d.resDe2 = de2;
+        d.resDe3 = de3;
+        return d;
+    }
+    static Ligne creerLigne1()
+    {
+        Ligne l = new Ligne();
+        l.c1 = initCase( "DEPA", true, false );
+        l.c1.suivante = initCase("BLEU", false, false);
+        l.c1.suivante.suivante = initCase("ROUG", false, false);
+        l.c1.suivante.suivante.suivante = initCase("VERT", false, false);
+        l.c1.suivante.suivante.suivante.suivante = initCase("BLEU", false, false);
+        l.c1.suivante.suivante.suivante.suivante.suivante = initCase("JAUN", false, true);
+        return l;
+    }
+    static Ligne creerLigne2()
+    {
+        Ligne l = new Ligne();
+        l.c1 = initCase( "DEPA", true, false );
+        l.c1.suivante = initCase("ROSE", false, false);
+        l.c1.suivante.suivante = initCase("JAUN", false, false);
+        l.c1.suivante.suivante.suivante = initCase("BLAN", false, false);
+        l.c1.suivante.suivante.suivante.suivante = initCase("ROUG", false, false);
+        l.c1.suivante.suivante.suivante.suivante.suivante = initCase("VERT", false, true);
+        return l;
+    }
+
+    static Case avanceCase(Ligne cLigne, Ligne cLigne2)
+    {
+        Ligne l = cLigne;
+        Ligne l2 = cLigne;
+        Case caseBolide = initCase("XOOX", true, false);
+
+        De resDe = lancerDeDes();
+        Bolide b = initBolide("XOOX");
+        // Dans le cas où la couleur de la case suivante haute et la couleur de la case suivante basse sont égales à l'un des résultats des dés
+        if( ( cLigne.c1.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.couleur == resDe.resDe3 ) && ( cLigne2.c1.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.couleur == resDe.resDe3 ) )
+        {   // On demande de choisir en tre la case haute ou basse
+            Ecran.afficherln("Choisissez entre la case du haut et la case du bas");
+            int choix = Clavier.saisirInt();
+            // 1 = haute, 2 = basse
+            while( choix != 1 || choix != 2)
             {
-                cNew.couleur = c3.couleur;
-                cNew.estOccupe = c3.estOccupe;
-                cNew.estSuivante = c3.estSuivante;
-                cNew.estDerniere = c3.estDerniere;
-                Ecran.afficherln("cNew : cpt 2: ", cNew.couleur, " ", cNew.estOccupe, " ", cNew.estSuivante, " ", cNew.estDerniere, cpt );
-                cpt++; 
+                Ecran.afficherln("Erreur, veuiller réessayer");
+                choix = Clavier.saisirInt();
+            }
+            // Dans le cas de 1
+            if( ( choix == 1  && cLigne.c1.estOccupe ) || ( choix == 1 && cLigne2.c1.estOccupe ) )
+            {   // En gros, il faut insérer une "case" qui sera le bolide et ça a chaque case? (Voir le td15 de base de prog)
+                Ecran.afficherln("Le bolide avance"); 
+                cLigne.c1.suivante.couleur = caseBolide.couleur;
+                cLigne.c1.suivante.estOccupe = true;
+                Ecran.afficherln(cLigne.c1.suivante.couleur);
             }
             else
-            {
-                if ( cpt == 3 )
+            // Dans le cas de 2
+            {   
+                Ecran.afficherln("Le bolide avance"); 
+                cLigne2.c1.suivante.couleur = caseBolide.couleur;
+                cLigne2.c1.suivante.estOccupe = true;
+                Ecran.afficherln(cLigne2.c1.suivante.couleur);
+            }
+        }
+        else
+        {   // Dans le cas où seulement l'une des deux couleurs des cases suivantes est égale à l'un des résultats des dés
+            if( ( cLigne.c1.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.couleur == resDe.resDe3 ) || ( cLigne2.c1.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.couleur == resDe.resDe3 ) )
+            {  
+                if ( ( cLigne.c1.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.couleur == resDe.resDe3 ) && ( cLigne.c1.estOccupe ))
                 {
-                    cNew.couleur = c4.couleur;
-                    cNew.estOccupe = c4.estOccupe;
-                    cNew.estSuivante = c4.estSuivante;
-                    cNew.estDerniere = c4.estDerniere; 
-                    Ecran.afficherln("cNew : cpt 3: ", cNew.couleur, " ", cNew.estOccupe, " ", cNew.estSuivante, " ", cNew.estDerniere, cpt );
-                    cpt++;
+                cLigne.c1.suivante.couleur = "BLEU";
+                cLigne.c1.estOccupe = false;
+                cLigne.c1.suivante.suivante.couleur = b.modele;
+                cLigne.c1.suivante.suivante.estOccupe = true;
+                cLigne.c1.suivante.estOccupe = false;
+
                 }
                 else
                 {
-                    if ( cpt == 4 )
-                    {
-                        cNew.couleur = c5.couleur;
-                        cNew.estOccupe = c5.estOccupe;
-                        cNew.estSuivante = c5.estSuivante;
-                        cNew.estDerniere = c5.estDerniere;
-                        Ecran.afficherln("cNew : cpt 4: ", cNew.couleur, " ", cNew.estOccupe, " ", cNew.estSuivante, " ", cNew.estDerniere, cpt );
-
-                    }
+                cLigne2.c1.suivante.suivante.couleur = "ROSE";
+                cLigne2.c1.suivante.suivante.estOccupe = false;
+                cLigne2.c1.suivante.suivante.suivante.couleur = b.modele;
+                cLigne2.c1.suivante.suivante.suivante.estOccupe = true;
                 }
+            
+       
             }
         }
-        return cNew;
+        return cLigne.c1.suivante;
     }
-    static void affichagePlateauJeu(Case newCaseSuivante, Bolide bolide, Case c0, Case c1, Case c2, Case c3, Case c4, Case c5)
+    // A enlever si problème
+    static De lancerDeDes()
+    {
+        De r = initDe("DEPA", "DEPA", "DEPA");
+        char roll;
+        Ecran.afficherln("Premier lancer !");
+        Ecran.afficherln("Appuyer sur 'r' pour lancer le dé");
+        
+        roll = Clavier.saisirChar();
+        while (roll != 'r')
+        {
+            Ecran.afficherln("Erreur, veuiller réessayer");
+            roll = Clavier.saisirChar();    
+        }
+        int tirage = (int) ( Math.random() * 4 ) + 1;
+        switch( tirage )
+        {
+            case 1:
+                r.resDe1 = "BLEU";
+                Ecran.afficherln( "La couleur tirée est ", r.resDe1, " !" );
+                break;
+            case 2:
+                r.resDe1 = "JAUN";
+                Ecran.afficherln( "La couleur tirée est ", r.resDe1, " !" );
+                break;
+            case 3:
+                r.resDe1 = "ROUG";
+                Ecran.afficherln( "La couleur tirée est ", r.resDe1, " !" );
+                break;
+            case 4:
+                r.resDe1 = "VERT";
+                Ecran.afficherln( "La couleur tirée est ", r.resDe1, " !" );
+                break;
+            case 5:
+                r.resDe1 = "ROSE";
+                Ecran.afficherln( "La couleur tirée est ", r.resDe1, " !" );
+                break;
+            case 6:
+                r.resDe1 = "BLAN";
+                Ecran.afficherln( "La couleur tirée est ", r.resDe1, " !" );
+                break;
+        }
+        // Lancer du deuxième dé
+        Ecran.afficherln("Deuxième lancer !");
+        Ecran.afficherln("Appuyer sur 'r' pour lancer le dé");
+
+        roll = Clavier.saisirChar();
+        while (roll != 'r')
+        {
+            Ecran.afficherln("Erreur, veuiller réessayer");
+            roll = Clavier.saisirChar();    
+        }
+        int tirage2 = (int) ( Math.random() * 4 ) + 1;
+        switch( tirage2 )
+        {
+            case 1:
+                r.resDe2 = "BLEU";
+                Ecran.afficherln( "La couleur tirée est ", r.resDe2, " !");
+                break;
+            case 2:
+                r.resDe2 = "JAUN";
+                Ecran.afficherln( "La couleur tirée est ", r.resDe2, " !");
+                break;
+            case 3:
+                r.resDe2 = "ROUG";
+                Ecran.afficherln( "La couleur tirée est ", r.resDe2, " !");
+                break;
+            case 4:
+                r.resDe2 = "VERT";
+                Ecran.afficherln( "La couleur tirée est ", r.resDe2, " !");
+                break;
+            case 5:
+                r.resDe2 = "ROSE";
+                Ecran.afficherln( "La couleur tirée est ", r.resDe1, " !" );
+                break;
+            case 6:
+                r.resDe2 = "BLAN";
+                Ecran.afficherln( "La couleur tirée est ", r.resDe1, " !" );
+                break;
+        }
+        // Lancer du troisième dé
+        Ecran.afficherln("Troisième lancer !");
+        Ecran.afficherln("Appuyer sur 'r' pour lancer le dé");
+
+        roll = Clavier.saisirChar();
+        while (roll != 'r')
+        {
+            Ecran.afficherln("Erreur, veuiller réessayer");
+            roll = Clavier.saisirChar();    
+        }
+        int tirage3 = (int) ( Math.random() * 4 ) + 1;
+        switch( tirage3 )
+        {
+            case 1:
+                r.resDe3 = "BLEU";
+                Ecran.afficherln( "La couleur tirée est ", r.resDe3, " !");
+                break;
+            case 2:
+                r.resDe3 = "JAUN";
+                Ecran.afficherln( "La couleur tirée est ", r.resDe3, " !");
+                break;
+            case 3:
+                r.resDe3 = "ROUG";
+                Ecran.afficherln( "La couleur tirée est ", r.resDe3, " !");
+                break;
+            case 4:
+                r.resDe3 = "VERT";
+                Ecran.afficherln( "La couleur tirée est ", r.resDe3, " !");
+                break;
+            case 5:
+                r.resDe3 = "ROSE";
+                Ecran.afficherln( "La couleur tirée est ", r.resDe1, " !" );
+                break;
+            case 6:
+                r.resDe3 = "BLAN";
+                Ecran.afficherln( "La couleur tirée est ", r.resDe1, " !" );
+                break;
+        }
+        //Debug
+        Ecran.afficherln(r.resDe1, " ", r.resDe2, " ", r.resDe3);
+        return r;
+    }
+
+    static void affichagePlateau()
     {   
+        
+        Ligne l = creerLigne1();
+        Ligne l2 = creerLigne2();
+        do{
+        avanceCase(l, l2);
         Ecran.afficher(" ");
         for( int i = 0 ; i < 41 ; i++ )
         {
             Ecran.afficher("_");
         }
         Ecran.sautDeLigne();
-        Ecran.afficherln("| ", bolide.modele, " | ", c1.couleur, " | ", c2.couleur, " | ", c3.couleur, " | ", c4.couleur, " | ", c5.couleur, " |");
+        Ecran.afficherln("| ", l.c1.couleur, " | ", l.c1.suivante.couleur, " | ", l.c1.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.suivante.suivante.couleur, " |");
         Ecran.afficher(" ");
         for( int i = 0 ; i < 41 ; i++ )
         {
             Ecran.afficher("-");
         }
         Ecran.sautDeLigne();
+        for( int i = 0 ; i < 41 ; i++ )
+        {
+            Ecran.afficher("_");
+        }
+        Ecran.sautDeLigne();
+        Ecran.afficherln("| ", l2.c1.couleur, " | ", l2.c1.suivante.couleur, " | ", l2.c1.suivante.suivante.couleur, " | ", l2.c1.suivante.suivante.suivante.couleur, " | ", l2.c1.suivante.suivante.suivante.suivante.couleur, " | ", l2.c1.suivante.suivante.suivante.suivante.suivante.couleur, " |");
+        Ecran.afficher(" ");
+        for( int i = 0 ; i < 41 ; i++ )
+        {
+            Ecran.afficher("-");
+        }
+        Ecran.sautDeLigne();
+        }while( l.c1.suivante.suivante.suivante.suivante.suivante.estOccupe != true || l2.c1.suivante.suivante.suivante.suivante.suivante.estOccupe != true );
     }
-    public static void main(String [] args)
+    public static void main(String[] args)
     {
-        Case c0 = initCase( "DEPA", true, false, false);
-        Case c1 = initCase( "BLEU", false, true, false);
-        Case c2 = initCase( "ROUG", false, false, false);
-        Case c3 = initCase( "VERT", false, false, false);
-        Case c4 = initCase( "BLEU", false, false, false);
-        Case c5 = initCase( "JAUN", false, false, true);
-
-        Bolide b1 = initBolide( "XOOX" );
-
-        affichagePlateau(b1, c0, c1, c2, c3, c4, c5);
-        bolideAvance( peutAvancer(c0, c1), couleurTiree(), b1, c0, c1, newCaseSuivante( c1,c2, c3, c4, c5, 1), c0 );
-        affichagePlateau( b1, c0, c1, c2, c3, c4, c5 );
-        bolideAvance( peutAvancer(c0, c1), couleurTireeD(), b1, c1, newCaseSuivante( c1, c2, c3, c4, c5, 1), c3, c1 );
-        affichagePlateau( b1, c0, c1, c2, c3, c4, c5 );
-    }
-
+        affichagePlateau();
+    }    
 }
