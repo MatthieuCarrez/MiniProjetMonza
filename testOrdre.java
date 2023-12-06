@@ -69,64 +69,212 @@ public class testOrdre
 
     static Case avanceCase(Ligne cLigne, Ligne cLigne2)
     {
+        int cpt = 0;
         Ligne l = cLigne;
         Ligne l2 = cLigne;
         Case caseBolide = initCase("XOOX", true, false);
 
         De resDe = lancerDeDes();
         Bolide b = initBolide("XOOX");
-        // Dans le cas où la couleur de la case suivante haute et la couleur de la case suivante basse sont égales à l'un des résultats des dés
-        if( ( cLigne.c1.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.couleur == resDe.resDe3 ) && ( cLigne2.c1.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.couleur == resDe.resDe3 ) )
-        {   // On demande de choisir en tre la case haute ou basse
+
+        // Première case | Dans le cas où seulement l'une des deux couleurs des cases suivantes est égale à l'un des résultats des dés
+        if( ( cLigne.c1.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.couleur == resDe.resDe3 ) || ( cLigne2.c1.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.couleur == resDe.resDe3 ) && ( cLigne.c1.estOccupe ) )
+        {   // Dans le cas où la couleur de la case suivante haute et la couleur de la case suivante basse sont égales à l'un des résultats des dés
+            if ( ( cLigne.c1.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.couleur == resDe.resDe3 ) && ( cLigne2.c1.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.couleur == resDe.resDe3 ) && ( cLigne.c1.estOccupe ) )
+            {   // On demande de choisir entre la case haute ou basse
+                Ecran.afficherln("Choisissez entre la case du haut et la case du bas");
+                int choix = Clavier.saisirInt();
+                // 1 = haute, 2 = basse
+                while( choix != 1 && choix != 2 )
+                {
+                    Ecran.afficherln("Erreur, veuiller réessayer");
+                    choix = Clavier.saisirInt();
+                }
+
+                if( ( choix == 1  && cLigne.c1.estOccupe ) || ( choix == 1 && cLigne2.c1.estOccupe ) )
+                {   // Dans le cas de 1 
+                    Ecran.afficherln("Le bolide avance"); 
+                    cLigne.c1.suivante.couleur = b.modele;
+                    // Les cases départ ne sont plus occupées
+                    cLigne.c1.estOccupe = false;
+                    cLigne2.c1.estOccupe = false;
+                    cLigne.c1.suivante.estOccupe = true;
+                    Ecran.afficherln(cLigne.c1.suivante.couleur);
+                   
+                }
+                else
+                {
+                    if ( ( choix == 2  && cLigne.c1.estOccupe ) || ( choix == 2 && cLigne2.c1.estOccupe ) )
+                    {   // Dans le cas de 2
+                        Ecran.afficherln("Le bolide avance"); 
+                        cLigne2.c1.suivante.couleur = caseBolide.couleur;
+                        // Les cases départ ne sont plus occupées
+                        cLigne.c1.estOccupe = false;
+                        cLigne2.c1.estOccupe = false;
+                        cLigne2.c1.suivante.estOccupe = true;
+                        Ecran.afficherln(cLigne2.c1.suivante.couleur);
+                    }
+                }
+            }
+            else
+            {   // Dans le cas où seulement l'une des deux couleurs des cases suivantes est égale à l'un des résultats des dés
+                if ( ( cLigne.c1.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.couleur == resDe.resDe3 ) && ( ( cLigne.c1.estOccupe ) || ( cLigne2.c1.estOccupe ) ) )
+                {
+                    // Les cases départ ne sont plus occupées
+                    cLigne.c1.estOccupe = false;
+                    cLigne2.c1.estOccupe = false;
+                    cLigne.c1.suivante.couleur = b.modele;
+                    cLigne.c1.suivante.estOccupe = true;
+                }
+                else
+                {
+                    if ( ( cLigne2.c1.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.couleur == resDe.resDe3 ) && ( ( cLigne.c1.estOccupe ) || ( cLigne2.c1.estOccupe ) ) )
+                    {   // Les cases départ ne sont plus occupées
+                        cLigne.c1.estOccupe = false;
+                        cLigne2.c1.estOccupe = false;
+                        cLigne2.c1.suivante.couleur = b.modele;
+                        cLigne2.c1.suivante.estOccupe = true;
+                    }
+                }
+            }
+        }
+        else
+        {   // Deuxième case | Dans le cas où seulement l'une des deux couleurs des cases suivantes est égale à l'un des résultats des dés
+            if( ( ( cLigne.c1.suivante.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.suivante.couleur == resDe.resDe3 ) || ( cLigne2.c1.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.couleur == resDe.resDe3 ) ) && ( ( cLigne.c1.suivante.estOccupe ) || ( cLigne2.c1.suivante.estOccupe ) ) )
+            {  // Dans le cas où la couleur de la case suivante haute et la couleur de la case suivante basse sont égales à l'un des résultats des dés
+                if( ( ( cLigne.c1.suivante.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne2.c1.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.couleur == resDe.resDe3 ) ) && ( ( cLigne.c1.suivante.estOccupe ) || ( cLigne2.c1.suivante.estOccupe ) ) )
+                {   // On demande de choisir en tre la case haute ou basse
+                    Ecran.afficherln("Choisissez entre la case du haut et la case du bas");
+                    int choix = Clavier.saisirInt();
+                    // 1 = haute, 2 = basse
+                    while( choix != 1 && choix != 2 )
+                    {
+                        Ecran.afficherln("Erreur, veuiller réessayer");
+                        choix = Clavier.saisirInt();
+                    }   // Dans le cas de 1
+                    if( ( choix == 1  && cLigne.c1.suivante.estOccupe ) || ( choix == 1 && cLigne2.c1.suivante.estOccupe ) )
+                    {
+                        Ecran.afficherln("Le bolide avance");
+                        cLigne.c1.suivante.couleur = "BLEU";
+                        cLigne2.c1.suivante.couleur = "ROSE"; 
+                        cLigne.c1.suivante.suivante.couleur = b.modele;
+                        // Les cases départ ne sont plus occupées
+                        cLigne.c1.suivante.estOccupe = false;
+                        cLigne2.c1.suivante.estOccupe = false;
+                        cLigne.c1.suivante.suivante.estOccupe = true;
+                        Ecran.afficherln(cLigne.c1.suivante.suivante.couleur);
+                    }
+                    else
+                    {
+                        if( ( choix == 2  && cLigne.c1.suivante.estOccupe ) || ( choix == 2 && cLigne2.c1.suivante.estOccupe ) )
+                        {   // Dans le cas de 2
+                            Ecran.afficherln("Le bolide avance"); 
+                            cLigne.c1.suivante.couleur = "BLEU";
+                            cLigne2.c1.suivante.couleur = "ROSE";
+                            cLigne2.c1.suivante.suivante.couleur = caseBolide.couleur;
+                            // Les cases départ ne sont plus occupées
+                            cLigne.c1.suivante.estOccupe = false;
+                            cLigne2.c1.suivante.estOccupe = false;
+                            cLigne2.c1.suivante.suivante.estOccupe = true;
+                            Ecran.afficherln(cLigne2.c1.suivante.suivante.couleur);
+                        }
+                    }
+                }
+                else
+                {
+                    if ( ( cLigne.c1.suivante.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.suivante.couleur == resDe.resDe3 ) && ( ( cLigne.c1.suivante.estOccupe ) || ( cLigne2.c1.suivante.estOccupe) ) ) 
+                    {
+                        cLigne.c1.suivante.couleur = "BLEU";
+                        cLigne2.c1.suivante.couleur = "ROSE";
+                        // Les cases précédentes ne sont plus occupées
+                        cLigne.c1.suivante.estOccupe = false;
+                        cLigne2.c1.suivante.estOccupe = false;
+                        cLigne.c1.suivante.suivante.couleur = b.modele;
+                        cLigne.c1.suivante.suivante.estOccupe = true;
+                        
+                    }
+                    else
+                    {
+                        if ( ( cLigne2.c1.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.couleur == resDe.resDe3 ) && ( ( cLigne.c1.suivante.estOccupe ) || ( cLigne2.c1.suivante.estOccupe ) ) )
+                        {    
+                            cLigne.c1.suivante.couleur = "BLEU";
+                            cLigne2.c1.suivante.couleur = "ROSE";
+                            // Les cases précédentes ne sont plus occupées
+                            cLigne.c1.suivante.estOccupe = false;
+                            cLigne2.c1.suivante.estOccupe = false;
+                            cLigne2.c1.suivante.suivante.couleur = b.modele;
+                            cLigne2.c1.suivante.suivante.estOccupe = true;
+                        }
+                    }     
+                }
+            }// Si ça fonctionne pas, c'est a cause de ça
+            else
+            {
+
+        }
+        
+
+        // Troisième case | Dans le cas où la couleur de la case suivante haute et la couleur de la case suivante basse sont égales à l'un des résultats des dés
+       /*if ( ( cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne2.c1.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.suivante.couleur == resDe.resDe3 ) )
+        {
+            // On demande de choisir en tre la case haute ou basse
             Ecran.afficherln("Choisissez entre la case du haut et la case du bas");
             int choix = Clavier.saisirInt();
             // 1 = haute, 2 = basse
-            while( choix != 1 || choix != 2)
+            while( choix != 1 && choix != 2 )
             {
                 Ecran.afficherln("Erreur, veuiller réessayer");
                 choix = Clavier.saisirInt();
             }
             // Dans le cas de 1
-            if( ( choix == 1  && cLigne.c1.estOccupe ) || ( choix == 1 && cLigne2.c1.estOccupe ) )
+            if( ( choix == 1  && cLigne.c1.suivante.estOccupe ) || ( choix == 1 && cLigne2.c1.suivante.estOccupe ) )
             {   // En gros, il faut insérer une "case" qui sera le bolide et ça a chaque case? (Voir le td15 de base de prog)
                 Ecran.afficherln("Le bolide avance"); 
-                cLigne.c1.suivante.couleur = caseBolide.couleur;
-                cLigne.c1.suivante.estOccupe = true;
-                Ecran.afficherln(cLigne.c1.suivante.couleur);
+                cLigne.c1.suivante.suivante.suivante.couleur = b.modele;
+                // Les cases départ ne sont plus occupées
+                cLigne.c1.suivante.suivante.estOccupe = false;
+                cLigne2.c1.suivante.suivante.estOccupe = false;
+                cLigne.c1.suivante.suivante.suivante.estOccupe = true;
+                Ecran.afficherln(cLigne.c1.suivante.suivante.suivante.couleur);
             }
             else
             // Dans le cas de 2
             {   
                 Ecran.afficherln("Le bolide avance"); 
-                cLigne2.c1.suivante.couleur = caseBolide.couleur;
-                cLigne2.c1.suivante.estOccupe = true;
-                Ecran.afficherln(cLigne2.c1.suivante.couleur);
+                cLigne2.c1.suivante.suivante.suivante.couleur = caseBolide.couleur;
+                // Les cases départ ne sont plus occupées
+                cLigne.c1.suivante.suivante.estOccupe = false;
+                cLigne2.c1.suivante.suivante.estOccupe = false;
+                cLigne2.c1.suivante.suivante.suivante.estOccupe = true;
+                Ecran.afficherln(cLigne2.c1.suivante.suivante.suivante.couleur);
             }
         }
         else
         {   // Dans le cas où seulement l'une des deux couleurs des cases suivantes est égale à l'un des résultats des dés
-            if( ( cLigne.c1.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.couleur == resDe.resDe3 ) || ( cLigne2.c1.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.couleur == resDe.resDe3 ) )
+            if( ( cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe3 ) || ( cLigne2.c1.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne.c1.suivante.suivante.estOccupe || cLigne2.c1.suivante.suivante.estOccupe ) )
             {  
-                if ( ( cLigne.c1.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.couleur == resDe.resDe3 ) && ( cLigne.c1.estOccupe ))
+                if ( ( cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne.c1.suivante.suivante.estOccupe || cLigne2.c1.suivante.suivante.estOccupe ) )
                 {
-                cLigne.c1.suivante.couleur = "BLEU";
-                cLigne.c1.estOccupe = false;
-                cLigne.c1.suivante.suivante.couleur = b.modele;
-                cLigne.c1.suivante.suivante.estOccupe = true;
-                cLigne.c1.suivante.estOccupe = false;
-
+                    cLigne.c1.suivante.suivante.couleur = "ROUG";
+                    cLigne2.c1.suivante.suivante.couleur = "JAUN";
+                    // Les premières cases ne sont plus occupées
+                    cLigne.c1.suivante.estOccupe = false;
+                    cLigne2.c1.suivante.estOccupe = false;
+                    cLigne.c1.suivante.suivante.couleur = b.modele;
+                    cLigne.c1.suivante.suivante.estOccupe = true;
                 }
                 else
                 {
-                cLigne2.c1.suivante.suivante.couleur = "ROSE";
-                cLigne2.c1.suivante.suivante.estOccupe = false;
-                cLigne2.c1.suivante.suivante.suivante.couleur = b.modele;
-                cLigne2.c1.suivante.suivante.suivante.estOccupe = true;
+                    cLigne.c1.suivante.couleur = "ROUG";
+                    cLigne2.c1.suivante.couleur = "JAUN";
+                    // Les cases départ ne sont plus occupées
+                    cLigne.c1.suivante.estOccupe = false;
+                    cLigne2.c1.suivante.estOccupe = false;
+                    cLigne2.c1.suivante.suivante.couleur = b.modele;
+                    cLigne2.c1.suivante.suivante.estOccupe = true;
                 }
-            
-       
             }
-        }
+        }*/
         return cLigne.c1.suivante;
     }
     // A enlever si problème
@@ -143,7 +291,7 @@ public class testOrdre
             Ecran.afficherln("Erreur, veuiller réessayer");
             roll = Clavier.saisirChar();    
         }
-        int tirage = (int) ( Math.random() * 4 ) + 1;
+        int tirage = (int) ( Math.random()   ) + 1;
         switch( tirage )
         {
             case 1:
@@ -181,7 +329,7 @@ public class testOrdre
             Ecran.afficherln("Erreur, veuiller réessayer");
             roll = Clavier.saisirChar();    
         }
-        int tirage2 = (int) ( Math.random() * 4 ) + 1;
+        int tirage2 = (int) ( Math.random()  ) + 3;
         switch( tirage2 )
         {
             case 1:
@@ -202,11 +350,11 @@ public class testOrdre
                 break;
             case 5:
                 r.resDe2 = "ROSE";
-                Ecran.afficherln( "La couleur tirée est ", r.resDe1, " !" );
+                Ecran.afficherln( "La couleur tirée est ", r.resDe2, " !" );
                 break;
             case 6:
                 r.resDe2 = "BLAN";
-                Ecran.afficherln( "La couleur tirée est ", r.resDe1, " !" );
+                Ecran.afficherln( "La couleur tirée est ", r.resDe2, " !" );
                 break;
         }
         // Lancer du troisième dé
@@ -219,7 +367,7 @@ public class testOrdre
             Ecran.afficherln("Erreur, veuiller réessayer");
             roll = Clavier.saisirChar();    
         }
-        int tirage3 = (int) ( Math.random() * 4 ) + 1;
+        int tirage3 = (int) ( Math.random() ) + 2;
         switch( tirage3 )
         {
             case 1:
@@ -240,11 +388,11 @@ public class testOrdre
                 break;
             case 5:
                 r.resDe3 = "ROSE";
-                Ecran.afficherln( "La couleur tirée est ", r.resDe1, " !" );
+                Ecran.afficherln( "La couleur tirée est ", r.resDe3, " !" );
                 break;
             case 6:
                 r.resDe3 = "BLAN";
-                Ecran.afficherln( "La couleur tirée est ", r.resDe1, " !" );
+                Ecran.afficherln( "La couleur tirée est ", r.resDe3, " !" );
                 break;
         }
         //Debug
