@@ -1,28 +1,28 @@
 // CARREZ Matthieu et Abdourakhmane KOUNDOUL TP H2
-public class miniProjetMonzaCarrez
+public class CARREZ_KOUNDOUL
 {   // Type agrégé des case du plateau
     static class Case
-    {
-        String couleur;
-        boolean estOccupe, estDerniere;
-        Case suivante;
-    }
+    {   
+        String couleur; // La couleur de la case
+        boolean estOccupe, estDerniere; // estOccupé permet de savoir où est le bolide ; estDerniere n'est VRAi que pour la dernière case, permettant d'arrêter le jeu
+        Case suivante; // Permet de créer une liste chaînée
+    }///////////////////////////////////
     // Type agrégé des lignes du plateau
     static class Ligne
-    {
+    {   // Me permet de de savoir quelle case est la suivante
         Case c1;
-    }
+    }/////////////////////
     // Type agrégé des dés
     static class De
-    {
+    {   // resDé1 = dé 1, resDé2 = dé 2, resDé3 = dé 3
         String resDe1, resDe2, resDe3;
-    }
+    }///////////////////////
     // Type agrégé du bolide
     static class Bolide
     {
-        String modele;
+        String modele; // Modele du bolide AKA XOOX
         Case c;
-    }
+    }//////////////////////////////////
     // Sous-algo initialisant les cases
     static Case initCase( String couleur, boolean estO, boolean estD )
     {
@@ -32,7 +32,7 @@ public class miniProjetMonzaCarrez
         c.estDerniere = estD;
         return c;
 
-    }
+    }//////////////////////////////////
     // Sous-algo initialisant le bolide
     static Bolide initBolide(String bModele)
     {
@@ -48,7 +48,7 @@ public class miniProjetMonzaCarrez
         d.resDe2 = de2;
         d.resDe3 = de3;
         return d;
-    }
+    }/////////////////////////////////////////////////
     // Sous-algo permettant de créer la première ligne
     static Ligne creerLigne1()
     {
@@ -60,8 +60,8 @@ public class miniProjetMonzaCarrez
         l.c1.suivante.suivante.suivante.suivante = initCase("BLEU", false, false);
         l.c1.suivante.suivante.suivante.suivante.suivante = initCase("JAUN", false, true);
         return l;
-    }
-    // Sous-algo permettant de créer la deuxième ligne
+    }////////////////////////////////////////////////
+    // Sous-algo permettant de créer la seconde ligne
     static Ligne creerLigne2()
     {
         Ligne l = new Ligne();
@@ -72,8 +72,63 @@ public class miniProjetMonzaCarrez
         l.c1.suivante.suivante.suivante.suivante = initCase("ROUG", false, false);
         l.c1.suivante.suivante.suivante.suivante.suivante = initCase("VERT", false, true);
         return l;
+    }////////////////////////////////////////////////////////////////////////////////////////
+    // Sous-algo qui permet d'afficher les règles et de choisir lesquelles afficher à l'écran
+    static void affichageRegles()
+    {   int choix = 0;
+        do
+        {
+            Ecran.afficherln("Veuiller choisir les règles à afficher ");
+            Ecran.afficherln("1 - Règles Monza avec avancement d'une case à chaque lancer des trois dés");
+            Ecran.afficherln("2 - Règles Monza avec avancement d'autant de cases que possible à chaque lancer des trois dés");
+            Ecran.afficherln("Si vous voulez jouer, taper 0");
+            choix = Clavier.saisirInt();
+            // Si l'utilisateur entre autre chose qu'1, 2 ou 0, affiche un message d'erreur et permet à l'utilisateur d'entrer une valeur correcte
+            while( choix != 1 && choix != 2 && choix != 0)
+            {
+                Ecran.afficherln("Erreur de saisie, veuiller recommencer");
+                choix = Clavier.saisirInt();
+            }
+            // Si l'utilisateur entre 1
+            if( choix == 1 )
+            {
+                Ecran.afficherln("Vous avez choisi les règles Monza avec avancement d'une case à chaque lancer des trois dés.");
+                Ecran.afficherln("Le but du jeu est d'atteindre la dernière case du plateau.");
+                Ecran.afficherln("Avec ces règles, il est possible d'avancer que d'une case par lancer, peu importe s'il était possible d'avancer plus.");
+                Ecran.afficherln("Retour au choix des règles");
+            }
+            else
+            {   // Si l'utilisateur entre 2
+                if( choix == 2 )
+                {
+                    Ecran.afficherln("Vous avez choisi les règles avec avancement d'autant de cases que possible à chaque lancer des trois dés.");
+                    Ecran.afficherln("Le but du jeu est d'atteindre la dernière case du plateau. Avec ces règles, il est possible d'avancer d'autant de cases que possible.");
+                    Ecran.afficherln("Par exemple si la prochaine case est BLEU et que celle d'après est ROUG et que lors du lancer des dés vous obtenez BLEU, ROUG et VERT, il vous sera possible d'avancer jusque la case ROUG.");
+                    Ecran.afficherln("Retour au choix des règles");
+                }
+            }
+            Ecran.sautDeLigne();
+        }while( choix != 0); // // Si l'utilisateur entre 0
     }
-    // Sous-algo permettant de choisir les règles permettant d'avancer d'autant de cases que possible. Pas encore fonctonniel
+    ////////////////////////////////////////////
+    // Sous-algo ui permet de choisir les règles
+    // Entrée choixMode = 1 ou 2 selon le choix de l'utilisateur. On le récupère dans affichagePlateau pour jouer selon les règles choisies
+    static int choixRegles(int choixMode)
+    {
+        Ecran.afficherln("Il est temps de choisir le mode de jeu");
+        Ecran.afficherln("1 - Monza avec avancement d'une case à chaque lancer des trois dés");
+        Ecran.afficherln("2 - Monza avec avancement d'autant de cases que possible à chaque lancer des trois dés");
+        choixMode = Clavier.saisirInt();
+
+        while( choixMode != 1 && choixMode != 2 )
+        {
+            Ecran.afficherln("Erreur de saisie, veuiller recommencer.");
+            choixMode = Clavier.saisirInt();
+        }
+        return choixMode;
+    }//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Sous-algo permettant de choisir les règles permettant d'avancer d'autant de cases que possible AKA l'étape 3
+    // Entrée cLigne = première ligne , Entrée cLigne2 = deuxième ligne
     static Case avanceAutantCasePoss(Ligne cLigne, Ligne cLigne2)
     {
         Ligne l = cLigne;
@@ -147,12 +202,33 @@ public class miniProjetMonzaCarrez
                 }
             }
         }
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if(cLigne.c1.suivante.couleur == b.modele || cLigne2.c1.suivante.couleur == b.modele)
+        // On remplace le String des dés déja utilisés par autre chose dans le but qu'ils ne soient pas réutilisés
+        if( ( cLigne.c1.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.couleur == resDe.resDe1 ) && ( cLigne.c1.estOccupe || cLigne2.c1.estOccupe ) )
         {
-            // Deuxième case | Dans le cas où seulement l'une des deux couleurs des cases suivantes est égale à l'un des résultats des dés
+            resDe.resDe1 = "Ce message n'est pas censé s'afficher";
+        }
+        else
+        {
+            if( ( cLigne.c1.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.couleur == resDe.resDe2 ) && ( cLigne.c1.estOccupe || cLigne2.c1.estOccupe ) )
+            {
+                resDe.resDe2 = "Vraiment, ce message n'est pas censé s'afficher";
+            }
+            else
+            {
+                if( ( cLigne.c1.suivante.couleur == resDe.resDe3 || cLigne2.c1.suivante.couleur == resDe.resDe3 ) && ( cLigne.c1.estOccupe || cLigne2.c1.estOccupe ) )
+                {
+                    resDe.resDe3 = "J'insiste, ce message n'est VRAIMENT pas censé s'afficher";
+                }
+            }
+        }
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Deuxième case | Si le bolide a avancer sur la case d'avant alors le bolide peut avancer sur celle-ci
+        if( cLigne.c1.suivante.couleur == b.modele || cLigne2.c1.suivante.couleur == b.modele && ( cLigne.c1.suivante.estOccupe || cLigne2.c1.suivante.estOccupe ) )
+        {
+            // Dans le cas où seulement l'une des deux couleurs des cases suivantes est égale à l'un des résultats des dés
             if( ( cLigne.c1.suivante.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.suivante.couleur == resDe.resDe3 || cLigne2.c1.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne.c1.suivante.estOccupe || cLigne2.c1.suivante.estOccupe ) )
-            {   Ecran.afficherln("ROUG et JAUN");
+            {   
+                /*Ecran.afficherln("ROUG et JAUN");*/ // Debug pour tester les conditions
                 // Dans le cas où la couleur de la case suivante haute et la couleur de la case suivante basse sont égales à l'un des résultats des dés
                 if( ( ( cLigne.c1.suivante.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne2.c1.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.couleur == resDe.resDe3 ) ) && ( cLigne.c1.suivante.estOccupe || cLigne2.c1.suivante.estOccupe ) )
                 {   // On demande de choisir entre la case haute ou basse
@@ -188,10 +264,11 @@ public class miniProjetMonzaCarrez
                         // Les cases départ ne sont plus occupées
                         cLigne.c1.suivante.estOccupe = false;
                         cLigne2.c1.suivante.estOccupe = false;
-
+                        // Les cases sont maintenant occupées
                         cLigne.c1.suivante.suivante.estOccupe = true;
                         cLigne2.c1.suivante.suivante.estOccupe = true;
-                        Ecran.afficherln(cLigne2.c1.suivante.suivante.couleur);
+                        // Debug
+                        /*Ecran.afficherln(cLigne2.c1.suivante.suivante.couleur);*/
                     }
                 }
                 else
@@ -224,12 +301,34 @@ public class miniProjetMonzaCarrez
                     }     
                 }
             }
-        }//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if( cLigne.c1.suivante.suivante.couleur == b.modele || cLigne2.c1.suivante.suivante.couleur == b.modele )
+        }
+        // On remplace le String des dés déja utilisés par autre chose dans le but qu'ils ne soient pas réutilisés
+        if( ( cLigne.c1.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.couleur == resDe.resDe1 ) && ( cLigne.c1.suivante.estOccupe || cLigne2.c1.suivante.estOccupe ) )
+        {   // Dé 1
+            resDe.resDe1 = "Ce message n'est pas censé s'afficher";
+        }
+        else
         {
-            // Troisième case | Dans le cas où seulement l'une des deux couleurs des cases suivantes est égale à l'un des résultats des dés
+            if( ( cLigne.c1.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.couleur == resDe.resDe2 ) && ( cLigne.c1.suivante.estOccupe || cLigne2.c1.suivante.estOccupe ) )
+            {   // Dé 2
+                resDe.resDe2 = "Vraiment, ce message n'est pas censé s'afficher";
+            }
+            else
+            {   // Dé 3
+                if( ( cLigne.c1.suivante.suivante.couleur == resDe.resDe3 || cLigne2.c1.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne.c1.suivante.estOccupe || cLigne2.c1.suivante.estOccupe ) )
+                {
+                    resDe.resDe3 = "J'insiste, ce message n'est VRAIMENT pas censé s'afficher";
+                }
+            }
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Troisième case | Si le bolide a avancer sur la case d'avant alors le bolide peut avancer sur celle-ci
+        if( cLigne.c1.suivante.suivante.couleur == b.modele || cLigne2.c1.suivante.suivante.couleur == b.modele && ( cLigne.c1.suivante.suivante.estOccupe && cLigne2.c1.suivante.suivante.estOccupe ) )
+        {
+            // Dans le cas où seulement l'une des deux couleurs des cases suivantes est égale à l'un des résultats des dés
             if( ( cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe3 || cLigne2.c1.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne.c1.suivante.suivante.estOccupe && cLigne2.c1.suivante.suivante.estOccupe ) )
-            {   Ecran.afficherln("VERT ET BLANC");
+            {   
+                /*Ecran.afficherln("VERT ET BLANC");*/ // Debug pour tester les conditions
                 // Dans le cas où la couleur de la case suivante haute et la couleur de la case suivante basse sont égales à l'un des résultats des dés
                 if( ( ( cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne2.c1.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.suivante.couleur == resDe.resDe3 ) ) && ( cLigne.c1.suivante.suivante.estOccupe && cLigne2.c1.suivante.suivante.estOccupe ) )
                 {   // On demande de choisir entre la case haute ou basse
@@ -300,12 +399,34 @@ public class miniProjetMonzaCarrez
                     }     
                 }
             }
-        }//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if( cLigne.c1.suivante.suivante.suivante.couleur == b.modele || cLigne2.c1.suivante.suivante.suivante.couleur == b.modele )
+        }
+        // On remplace la donnée des dés déja utiliser par autre chose dans le but qu'il ne soit pas réutilisés
+        if( ( cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.suivante.couleur == resDe.resDe1 ) && ( cLigne.c1.suivante.suivante.estOccupe && cLigne2.c1.suivante.suivante.estOccupe ) )
         {
-            // Quatrième case | Dans le cas où seulement l'une des deux couleurs des cases suivantes est égale à l'un des résultats des dés  
+            resDe.resDe1 = "Ce message n'est pas censé s'afficher";
+        }
+        else
+        {
+            if( ( cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.suivante.couleur == resDe.resDe2 ) && ( cLigne.c1.suivante.suivante.estOccupe && cLigne2.c1.suivante.suivante.estOccupe ) )
+            {
+                resDe.resDe2 = "Vraiment, ce message n'est pas censé s'afficher";
+            }
+            else
+            {
+                if( ( cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe3 || cLigne2.c1.suivante.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne.c1.suivante.suivante.estOccupe && cLigne2.c1.suivante.suivante.estOccupe ) )
+                {
+                    resDe.resDe3 = "J'insiste, ce message n'est VRAIMENT pas censé s'afficher";
+                }
+            }
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Quatrième case | Si le bolide a avancer sur la case d'avant alors le bolide peut avancer sur celle-ci
+        if( cLigne.c1.suivante.suivante.suivante.couleur == b.modele || cLigne2.c1.suivante.suivante.suivante.couleur == b.modele && ( cLigne.c1.suivante.suivante.suivante.estOccupe && cLigne2.c1.suivante.suivante.suivante.estOccupe ) )
+        {
+            // Dans le cas où seulement l'une des deux couleurs des cases suivantes est égale à l'un des résultats des dés  
             if( ( cLigne.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe3 || cLigne2.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne.c1.suivante.suivante.suivante.estOccupe && cLigne2.c1.suivante.suivante.suivante.estOccupe ) )
-            {   Ecran.afficherln("VERT ET BLANC");
+            {   
+                /*Ecran.afficherln("VERT ET BLANC");*/ // Debug pour tester les conditions
                 // Dans le cas où la couleur de la case suivante haute et la couleur de la case suivante basse sont égales à l'un des résultats des dés
                 if( ( ( cLigne.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne2.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe3 ) ) && ( cLigne.c1.suivante.suivante.suivante.estOccupe && cLigne2.c1.suivante.suivante.suivante.estOccupe ) )
                 {   // On demande de choisir entre la case haute ou basse
@@ -376,13 +497,34 @@ public class miniProjetMonzaCarrez
                     }     
                 }
             }
-        }//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if( cLigne.c1.suivante.suivante.suivante.suivante.couleur == b.modele || cLigne2.c1.suivante.suivante.suivante.suivante.couleur == b.modele )
+        }
+        // On remplace la donnée des dés déja utiliser par autre chose dans le but qu'il ne soit pas réutilisés
+        if( ( cLigne.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe1 ) && ( cLigne.c1.suivante.suivante.suivante.estOccupe && cLigne2.c1.suivante.suivante.suivante.estOccupe ) )
         {
-            // Cinquième case | Dans le cas où seulement l'une des deux couleurs des cases suivantes est égale à l'un des résultats des dés 
+            resDe.resDe1 = "Ce message n'est pas censé s'afficher";
+        }
+        else
+        {
+            if( ( cLigne.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe2 ) && ( cLigne.c1.suivante.suivante.suivante.estOccupe && cLigne2.c1.suivante.suivante.suivante.estOccupe ) )
+            {
+                resDe.resDe2 = "Vraiment, ce message n'est pas censé s'afficher";
+            }
+            else
+            {
+                if( ( cLigne.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe3 || cLigne2.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne.c1.suivante.suivante.suivante.estOccupe && cLigne2.c1.suivante.suivante.suivante.estOccupe ) )
+                {
+                    resDe.resDe3 = "J'insiste, ce message n'est VRAIMENT pas censé s'afficher";
+                }
+            }
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Cinquième case | Si le bolide a avancer sur la case d'avant alors le bolide peut avancer sur celle-ci
+        if( cLigne.c1.suivante.suivante.suivante.suivante.couleur == b.modele || cLigne2.c1.suivante.suivante.suivante.suivante.couleur == b.modele && ( cLigne.c1.suivante.suivante.suivante.suivante.estOccupe && cLigne2.c1.suivante.suivante.suivante.suivante.estOccupe ) )
+        {
+            // Dans le cas où seulement l'une des deux couleurs des cases suivantes est égale à l'un des résultats des dés 
             if( ( cLigne.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe3 || cLigne2.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne.c1.suivante.suivante.suivante.suivante.estOccupe && cLigne2.c1.suivante.suivante.suivante.suivante.estOccupe ) )
             {   
-                Ecran.afficherln("VERT ET BLANC");
+                /*Ecran.afficherln("VERT ET BLANC");*/ // Debug pour tester les conditions
                 // Dans le cas où la couleur de la case suivante haute et la couleur de la case suivante basse sont égales à l'un des résultats des dés
                 if( ( ( cLigne.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne2.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe3 ) ) && ( cLigne.c1.suivante.suivante.suivante.suivante.estOccupe && cLigne2.c1.suivante.suivante.suivante.suivante.estOccupe ) )
                 {   // On demande de choisir entre la case haute ou basse
@@ -455,7 +597,8 @@ public class miniProjetMonzaCarrez
             }
         }return cLigne.c1.suivante;
     }   
-    // Sous-algo permettant de choisir les règles permettant d'avancer d'une seule case par lancer
+    // Sous-algo permettant de choisir les règles permettant d'avancer d'une seule case par lancer AKA l'étape 2
+    // Entrée cLigne = première ligne , Entrée cLigne2 = deuxième ligne
     static Case avanceUneCase(Ligne cLigne, Ligne cLigne2)
     {
         Ligne l = cLigne;
@@ -532,7 +675,8 @@ public class miniProjetMonzaCarrez
         else /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         {   // Deuxième case | Dans le cas où seulement l'une des deux couleurs des cases suivantes est égale à l'un des résultats des dés
             if( ( cLigne.c1.suivante.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.suivante.couleur == resDe.resDe3 || cLigne2.c1.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne.c1.suivante.estOccupe || cLigne2.c1.suivante.estOccupe ) )
-            {  Ecran.afficherln("ROUG et JAUN");
+            {  
+                /*Ecran.afficherln("ROUG et JAUN");*/ // Debug pour tester les conditions
                 // Dans le cas où la couleur de la case suivante haute et la couleur de la case suivante basse sont égales à l'un des résultats des dés
                 if( ( ( cLigne.c1.suivante.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne2.c1.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.couleur == resDe.resDe3 ) ) && ( cLigne.c1.suivante.estOccupe || cLigne2.c1.suivante.estOccupe ) )
                 {   // On demande de choisir entre la case haute ou basse
@@ -607,7 +751,8 @@ public class miniProjetMonzaCarrez
             else //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             {   // Troisième case | Dans le cas où seulement l'une des deux couleurs des cases suivantes est égale à l'un des résultats des dés
                 if( ( cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe3 || cLigne2.c1.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne.c1.suivante.suivante.estOccupe && cLigne2.c1.suivante.suivante.estOccupe ) )
-                {   Ecran.afficherln("VERT ET BLANC");
+                {   
+                    /*Ecran.afficherln("VERT ET BLANC");*/ // Debug pour tester les conditions
                     // Dans le cas où la couleur de la case suivante haute et la couleur de la case suivante basse sont égales à l'un des résultats des dés
                     if( ( ( cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne2.c1.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.suivante.couleur == resDe.resDe3 ) ) && ( cLigne.c1.suivante.suivante.estOccupe && cLigne2.c1.suivante.suivante.estOccupe ) )
                     {   // On demande de choisir entre la case haute ou basse
@@ -682,7 +827,8 @@ public class miniProjetMonzaCarrez
                 else //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 {   // Quatrième case | Dans le cas où seulement l'une des deux couleurs des cases suivantes est égale à l'un des résultats des dés  
                     if( ( cLigne.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe3 || cLigne2.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne.c1.suivante.suivante.suivante.estOccupe && cLigne2.c1.suivante.suivante.suivante.estOccupe ) )
-                    {   Ecran.afficherln("VERT ET BLANC");
+                    {   
+                        /*Ecran.afficherln("VERT ET BLANC");*/ // Debug pour tester les conditions
                         // Dans le cas où la couleur de la case suivante haute et la couleur de la case suivante basse sont égales à l'un des résultats des dés
                         if( ( ( cLigne.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne2.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.suivante.suivante.couleur == resDe.resDe3 ) ) && ( cLigne.c1.suivante.suivante.suivante.estOccupe && cLigne2.c1.suivante.suivante.suivante.estOccupe ) )
                         {   // On demande de choisir entre la case haute ou basse
@@ -758,7 +904,7 @@ public class miniProjetMonzaCarrez
                     {   // Cinquième case | Dans le cas où seulement l'une des deux couleurs des cases suivantes est égale à l'un des résultats des dés 
                         if( ( cLigne.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe3 || cLigne2.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne.c1.suivante.suivante.suivante.suivante.estOccupe && cLigne2.c1.suivante.suivante.suivante.suivante.estOccupe ) )
                         {   
-                            Ecran.afficherln("VERT ET BLANC");
+                            /*Ecran.afficherln("VERT ET BLANC");*/ // Debug pour tester les conditions
                             // Dans le cas où la couleur de la case suivante haute et la couleur de la case suivante basse sont égales à l'un des résultats des dés
                             if( ( ( cLigne.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe3 ) && ( cLigne2.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe1 || cLigne2.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe2 || cLigne2.c1.suivante.suivante.suivante.suivante.suivante.couleur == resDe.resDe3 ) ) && ( cLigne.c1.suivante.suivante.suivante.suivante.estOccupe && cLigne2.c1.suivante.suivante.suivante.suivante.estOccupe ) )
                             {   // On demande de choisir entre la case haute ou basse
@@ -837,6 +983,7 @@ public class miniProjetMonzaCarrez
         return cLigne.c1.suivante;
     }
     // Sous-algo permetant de lancer les dés
+    // J'ai fais le choix de demander à l'utilisateur d'appuyer sur une touche pour lancer les dés pour que ce soit plus facile à lire lors de l'utilisation du programme
     static De lancerDeDes()
     {
         De r = initDe("DEPA", "DEPA", "DEPA");
@@ -960,44 +1107,141 @@ public class miniProjetMonzaCarrez
     }
     // Sous-algo permmetant l'affichage du plateau
     static void affichagePlateau()
-    {   
-        
+    {
         Ligne l = creerLigne1();
         Ligne l2 = creerLigne2();
-        do{
-        avanceAutantCasePoss(l, l2);
-        /*avanceUneCase(l, l2);*/
-        Ecran.afficher(" ");
-        for( int i = 0 ; i < 41 ; i++ )
-        {
-            Ecran.afficher("_");
+        
+        if( choixRegles(0) == 1 )
+        {   // Règles avec un seul avancement à la fois
+            // Premier affichage de la première ligne
+            Ecran.afficher(" ");
+            for( int i = 0 ; i < 41 ; i++ )
+            {
+                Ecran.afficher("_");
+            }
+            Ecran.sautDeLigne();
+            Ecran.afficherln("| ", l.c1.couleur, " | ", l.c1.suivante.couleur, " | ", l.c1.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.suivante.suivante.couleur, " |");
+            Ecran.afficher(" ");
+            for( int i = 0 ; i < 41 ; i++ )
+            {
+                Ecran.afficher("-");
+            }
+            Ecran.sautDeLigne();
+            // Premier affichage de la deuxième ligne
+            Ecran.afficher(" ");
+            for( int i = 0 ; i < 41 ; i++ )
+            {
+                Ecran.afficher("_");
+            }
+            Ecran.sautDeLigne();
+            Ecran.afficherln("| ", l2.c1.couleur, " | ", l2.c1.suivante.couleur, " | ", l2.c1.suivante.suivante.couleur, " | ", l2.c1.suivante.suivante.suivante.couleur, " | ", l2.c1.suivante.suivante.suivante.suivante.couleur, " | ", l2.c1.suivante.suivante.suivante.suivante.suivante.couleur, " |");
+            Ecran.afficher(" ");
+            for( int i = 0 ; i < 41 ; i++ )
+            {
+                Ecran.afficher("-");
+            }
+            Ecran.sautDeLigne();
+
+            do
+            {   // Plateau avec les valeurs misent à jour
+                avanceUneCase(l, l2);
+                Ecran.afficher(" ");
+                for( int i = 0 ; i < 41 ; i++ )
+                {
+                    Ecran.afficher("_");
+                }
+                Ecran.sautDeLigne();
+                Ecran.afficherln("| ", l.c1.couleur, " | ", l.c1.suivante.couleur, " | ", l.c1.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.suivante.suivante.couleur, " |");
+                Ecran.afficher(" ");
+                for( int i = 0 ; i < 41 ; i++ )
+                {
+                    Ecran.afficher("-");
+                }
+                Ecran.sautDeLigne();
+                Ecran.afficher(" ");
+                for( int i = 0 ; i < 41 ; i++ )
+                {
+                    Ecran.afficher("_");
+                }
+                Ecran.sautDeLigne();
+                Ecran.afficherln("| ", l2.c1.couleur, " | ", l2.c1.suivante.couleur, " | ", l2.c1.suivante.suivante.couleur, " | ", l2.c1.suivante.suivante.suivante.couleur, " | ", l2.c1.suivante.suivante.suivante.suivante.couleur, " | ", l2.c1.suivante.suivante.suivante.suivante.suivante.couleur, " |");
+                Ecran.afficher(" ");
+                for( int i = 0 ; i < 41 ; i++ )
+                {
+                    Ecran.afficher("-");
+                }
+                Ecran.sautDeLigne();
+            }while( l.c1.suivante.suivante.suivante.suivante.suivante.estOccupe != true || l2.c1.suivante.suivante.suivante.suivante.suivante.estOccupe != true );
+            Ecran.afficherln("Vous avez atteint l'arrivée, bravo vous avez gagné !");
         }
-        Ecran.sautDeLigne();
-        Ecran.afficherln("| ", l.c1.couleur, " | ", l.c1.suivante.couleur, " | ", l.c1.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.suivante.suivante.couleur, " |");
-        Ecran.afficher(" ");
-        for( int i = 0 ; i < 41 ; i++ )
-        {
-            Ecran.afficher("-");
+        else//////////////////////////////////////////////
+        {   //Règles avec autant d'avancement que possible
+            // Premier affichage de la première ligne
+            Ecran.afficher(" ");
+            for( int i = 0 ; i < 41 ; i++ )
+            {
+                Ecran.afficher("_");
+            }
+            Ecran.sautDeLigne();
+            Ecran.afficherln("| ", l.c1.couleur, " | ", l.c1.suivante.couleur, " | ", l.c1.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.suivante.suivante.couleur, " |");
+            Ecran.afficher(" ");
+            for( int i = 0 ; i < 41 ; i++ )
+            {
+                Ecran.afficher("-");
+            }
+            Ecran.sautDeLigne();
+            // Premier affichage de la deuxième ligne
+            Ecran.afficher(" ");
+            for( int i = 0 ; i < 41 ; i++ )
+            {
+                Ecran.afficher("_");
+            }
+            Ecran.sautDeLigne();
+            Ecran.afficherln("| ", l2.c1.couleur, " | ", l2.c1.suivante.couleur, " | ", l2.c1.suivante.suivante.couleur, " | ", l2.c1.suivante.suivante.suivante.couleur, " | ", l2.c1.suivante.suivante.suivante.suivante.couleur, " | ", l2.c1.suivante.suivante.suivante.suivante.suivante.couleur, " |");
+            Ecran.afficher(" ");
+            for( int i = 0 ; i < 41 ; i++ )
+            {
+                Ecran.afficher("-");
+            }
+            Ecran.sautDeLigne();
+            do
+            {   // Plateau avec les valeurs misent à jour
+                avanceAutantCasePoss(l, l2);
+                Ecran.afficher(" ");
+                for( int i = 0 ; i < 41 ; i++ )
+                {
+                    Ecran.afficher("_");
+                }
+                Ecran.sautDeLigne();
+                Ecran.afficherln("| ", l.c1.couleur, " | ", l.c1.suivante.couleur, " | ", l.c1.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.suivante.couleur, " | ", l.c1.suivante.suivante.suivante.suivante.suivante.couleur, " |");
+                Ecran.afficher(" ");
+                for( int i = 0 ; i < 41 ; i++ )
+                {
+                    Ecran.afficher("-");
+                }
+                Ecran.sautDeLigne();
+                Ecran.afficher(" ");
+                for( int i = 0 ; i < 41 ; i++ )
+                {
+                    Ecran.afficher("_");
+                }
+                Ecran.sautDeLigne();
+                Ecran.afficherln("| ", l2.c1.couleur, " | ", l2.c1.suivante.couleur, " | ", l2.c1.suivante.suivante.couleur, " | ", l2.c1.suivante.suivante.suivante.couleur, " | ", l2.c1.suivante.suivante.suivante.suivante.couleur, " | ", l2.c1.suivante.suivante.suivante.suivante.suivante.couleur, " |");
+                Ecran.afficher(" ");
+                for( int i = 0 ; i < 41 ; i++ )
+                {
+                    Ecran.afficher("-");
+                }
+                Ecran.sautDeLigne();
+            }while( l.c1.suivante.suivante.suivante.suivante.suivante.estOccupe != true || l2.c1.suivante.suivante.suivante.suivante.suivante.estOccupe != true );
+            Ecran.afficherln("Vous avez atteint l'arrivée, bravo vous avez gagné !");
         }
-        Ecran.sautDeLigne();
-        for( int i = 0 ; i < 41 ; i++ )
-        {
-            Ecran.afficher("_");
-        }
-        Ecran.sautDeLigne();
-        Ecran.afficherln("| ", l2.c1.couleur, " | ", l2.c1.suivante.couleur, " | ", l2.c1.suivante.suivante.couleur, " | ", l2.c1.suivante.suivante.suivante.couleur, " | ", l2.c1.suivante.suivante.suivante.suivante.couleur, " | ", l2.c1.suivante.suivante.suivante.suivante.suivante.couleur, " |");
-        Ecran.afficher(" ");
-        for( int i = 0 ; i < 41 ; i++ )
-        {
-            Ecran.afficher("-");
-        }
-        Ecran.sautDeLigne();
-        }while( l.c1.suivante.suivante.suivante.suivante.suivante.estOccupe != true || l2.c1.suivante.suivante.suivante.suivante.suivante.estOccupe != true );
     }
     // Main
     public static void main(String [] args)
     {
+        affichageRegles();
         affichagePlateau();
     }
-    // A rajouter: sous-algo avec des règles, du QoL, expliquer les entrées et sorties des sous-algo, dans affichagePlateau, rajouter la possibilité de choisir entre les deux types de règles    
+    // Du QoL, expliquer les entrées et sorties des sous-algo
 }
